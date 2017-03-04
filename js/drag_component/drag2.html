@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>红宝书上的拖拽</title>
+</head>
+<body>
+
+    <div class="draggable" style="position: absolute;background-color: red;width: 100px;height: 100px"></div>
+    <div class="draggable" style="position: absolute;background-color: blue;width: 100px;height: 100px;top:100px"></div>
+    <div class="draggable" style="position: absolute;background-color: green;width: 100px;height: 100px;top:200px"></div>
+
+    <script type="text/javascript">
+
+        window.onload = function(){
+            DragDrop().enable();
+//            DragDrop.disable();
+        };
+
+
+        /**
+         * 事件处理函数
+         */
+        var EventUnit = {
+
+            /**
+             * 绑定事件
+             * @param   {Element}   element DOM元素
+             * @param   {String}    event   事件名称
+             * @param   {Function}  handler    绑定的函数
+             */
+            addHandler: function(element,event,handler){
+                if(element.addEventListener){
+                    element.addEventListener(event,handler,false);
+                }else if(element.attachEvent){
+                    element.attachEvent("on"+event,handler);
+                }else{
+                    element["on"+event] = handler;
+                }
+            },
+            /**
+             * 移除绑定事件
+             * @param   {Element}   element DOM元素
+             * @param   {String}    event   事件名称
+             * @param   {Function}  handler    绑定的函数
+             */
+            removeHandler: function(element,event,handler){
+                if(element.removeEventListener){
+                    element.removeEventListener(event,handler,false);
+                }else if(element.detachEvent){
+                    element.detachEvent("on"+event,handler);
+                }else{
+                    element["on"+event] = null;
+                }
+            },
+
+            /**
+             * 获取当前事件
+             * @param   {String}    event   事件
+             * @return  对event对象的引用
+             */
+            getEvent: function(event){
+                return event ? event : window.event;
+            },
+            getTarget: function(event){
+                return event.target || event.srcElement;
+            }
+        };
+
+        var DragDrop = function(){
+            var dragging = null,
+                    diffX = 0,
+                    diffY = 0,
+                    arg = null;
+            if(arguments.length >= 1){
+                arg = arguments[0];
+            }
+            function handleEvent(event){
+                event = EventUnit.getEvent(event);
+                var target = EventUnit.getTarget(event);
+                if(arg !== null){
+                    target = arg.obj;
+                }
+                switch(event.type){
+                    case "mousedown":
+                        if(target.className.indexOf("draggable") > -1){
+                            dragging = target;
+                            diffX = event.clientX - target.offsetLeft;
+                            diffY = event.clientY - target.offsetTop;
+                        }
+                        break;
+
+                    case "mousemove":
+                        if(dragging !== null){
+                            dragging.style.left = (event.clientX - diffX) + "px";
+                            dragging.style.top = (event.clientY - diffY) + "px";
+                        }
+                        break;
+
+                    case "mouseup":
+                        dragging = null;
+                        break;
+                }
+            }
+
+            return{
+                enable: function(){
+                    EventUnit.addHandler(document,"mousedown",handleEvent);
+                    EventUnit.addHandler(document,"mousemove",handleEvent);
+                    EventUnit.addHandler(document,"mouseup",handleEvent);
+                },
+                disable: function(){
+                    EventUnit.removeHandler(document,"mousedown",handleEvent);
+                    EventUnit.removeHandler(document,"mousedown",handleEvent);
+                    EventUnit.removeHandler(document,"mousedown",handleEvent);
+                }
+            }
+        };
+
+
+
+    </script>
+
+</body>
+</html>

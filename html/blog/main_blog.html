@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ block title }}</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="row">
+                <div class="header-logo col-md-6">Zzr</div>
+                <nav class="header-nav ">
+                    <ul>
+                        <li class="col-md-1 col-md-offset-2"><a href="#"><i class="iconfont icon">&#xe600;</i>home</a></li>
+                        <li class="col-md-1"><a href="#"><i class="iconfont icon">&#xe603;</i>demo</a></li>
+                        <li class="col-md-1"><a href="#"><i class="iconfont icon">&#xe604;</i>about</a></li>
+                        <li class="col-md-1"><a href="#"><i class="iconfont icon">&#xe602;</i>github</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="header-title">记录点滴</div>
+    </header>
+
+    <section class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <article class="post">
+                        <div class="post-head">
+                            <h1 class="post-title">第一篇博文</h1>
+                            <div class="post-meta">
+                                <time class="post-date">2016年4月24日</time>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p class="post-img"><img  src="img/doc1_1.jpg"></p>
+                            <p class="post-abstract">作为博客的第一篇文章，就总结一下博客的搭建过程,该博客使用python以及flask框架，支持markdown写作...</p>
+                        </div>
+                        <div class="post-link">
+                            <a class="post-btn">阅读全文</a>
+                        </div>
+                    </article>
+
+
+
+                    <nav class="pagination-nav">
+                        <ul class="pagination">
+                            <li><a href="#"><span aria-hidden="true">&larr;</span></a></li>
+                            <li><a href="#">共1页</a></li>
+                            <li><a href="#"><span aria-hidden="true">&rarr;</span></a></li>
+                        </ul>
+                    </nav>
+
+                </div>
+                <aside class="col-md-3 col-md-offset-1">
+                    <div class="aside-wrap">
+                        <h2 class="aside-title">Tag</h2>
+                        <a class="tag-item"><span class="item-name">javascript</span><span class="item-count">5</span></a>
+                        <a class="tag-item">javascript</a>
+                        <a class="tag-item">javascript</a>
+                    </div>
+                    <div class="timer-wrap">
+                        <canvas id="canvas" style="display:block;margin:10px auto"></canvas>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="email">411489774@qq.com<i class="icon iconfont">&#xe601;</i></span>
+                    |
+                    <span class="copyright">Copyright © Zhangzirui</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" data-main="./js/main.js" src="js/require.js"></script>
+</body>
+</html>

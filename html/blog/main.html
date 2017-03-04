@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Zzr blog</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style2.css" rel="stylesheet" type="text/css">
+    <link href="css/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="all-wrap">
+        <header id="main-header">
+            <div class="container">
+                <div class="row">
+                    <h1 class="header-logo col-md-6"><a class="#">Zzr</a></h1>
+                    <nav class="header-nav ">
+                        <ul>
+                            <li class="col-md-1 col-md-offset-2"><a href="#"><i class="iconfont icon">&#xe600;</i>home</a></li>
+                            <li class="col-md-1"><a href="#"><i class="iconfont icon">&#xe603;</i>demo</a></li>
+                            <li class="col-md-1"><a href="#"><i class="iconfont icon">&#xe604;</i>about</a></li>
+                            <li class="col-md-1"><a href="#"><i class="iconfont icon">&#xe602;</i>github</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <section id="guide-wrap">
+            <div class="guide-content">
+                <h2 class="img-title">记录点滴</h2>
+                <p>以此博客记录和监督我在学习过程中见过的风景</p>
+                <button>See More</button>
+            </div>
+        </section>
+        <section id="guide-box">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="box-wrap">
+                            <div class="tag-icon"><span class="iconfont icon2">&#xe606;</span></div>
+                            <div class="tag-dis" style="display: none"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="box-wrap">
+                            <canvas id="canvas" style="display: none;opacity: 0"></canvas>
+                            <div class="clock-icon">
+                                <span class="iconfont icon2">&#xe609;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="box-wrap">
+                            <div class="tag-icon"><span class="iconfont icon2">&#xe606;</span></div>
+                            <div class="tag-dis" style="display: none"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="box-wrap">
+                            <canvas id="canvas" style="display: none;opacity: 0"></canvas>
+                            <div class="clock-icon">
+                                <span class="iconfont icon2">&#xe609;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="main-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="post-img">
+                            <img src="img/doc1_1.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <article class="post">
+                            <h1 class="post-title">第一篇博文</h1>
+                            <div class="post-meta">
+                                <time class="post-date">2016年4月24日</time>
+                            </div>
+                            <p class="post-abstract">作为博客的第一篇文章，就总结一下博客的搭建过程,该博客使用python以及flask框架，支持markdown写作...</p>
+                            <div class="post-link">
+                                <a class="post-btn">阅读全文</a>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-md-9">
+                        <article class="post">
+                            <h1 class="post-title">第一篇博文</h1>
+                            <div class="post-meta">
+                                <time class="post-date">2016年4月24日</time>
+                            </div>
+                            <p class="post-abstract">作为博客的第一篇文章，就总结一下博客的搭建过程,该博客使用python以及flask框架，支持markdown写作...</p>
+                            <div class="post-link">
+                                <a class="post-btn">阅读全文</a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="post-img">
+                            <img src="img/doc1_1.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-md-offset-4 col-md-4">
+                        <nav class="pagination-nav">
+                            <ul class="pagination">
+                                <li><a href="#"><span aria-hidden="true">&larr;</span></a></li>
+                                <li><a href="#">共1页</a></li>
+                                <li><a href="#"><span aria-hidden="true">&rarr;</span></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="main-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="email">411489774@qq.com<i class="icon iconfont">&#xe601;</i></span>
+                        |
+                        <span class="copyright">Copyright © Zhangzirui</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script type="text/javascript" data-main="./js/main.js" src="js/require.js"></script>
+</body>
+</html>

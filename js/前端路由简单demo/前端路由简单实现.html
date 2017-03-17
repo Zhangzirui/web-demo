@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>前端路由简单实现</title>
+    <style>
+        a {
+            display: block;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="#/article" id="/article">hash: #/article</a>
+    <a href="#/article/js" id="/article/js">hash: #/article/js</a>
+    <a href="#/article/js/page=1" id="/article/js/page=1">hash: #/article/js/page=1</a>
+
+    <script type="text/javascript">
+
+
+        function Route() {
+
+            this.cache = {};
+
+            this.on = function(url, callback) {
+                this.cache[url] = callback;
+            };
+
+            this.trigger = function(hash) {
+                var itemUrl = null;
+                for (itemUrl in this.cache) {
+                    // param为/aa/:id/:value中id,value的值，如没有则为null
+                    var param = this.parse(itemUrl, hash);
+                    if (param) {
+                        this.cache[itemUrl].apply(this, param.slice(1));
+                    }
+                }
+            };
+
+            this.parse = function(itemUrl, hash) {
+                var patternStr = itemUrl.replace(/\/:\w+/g,"/([\\w-=_]+){1}"),
+                        pattern = new RegExp("^" + patternStr + "$"),
+                        param = pattern.exec(hash);
+                return param;
+            };
+
+            this.init = function() {
+                var that = this;
+                eventListener(window, "hashchange", function() {
+                    var hash = location.hash.slice(1);
+                    that.trigger(hash);
+                });
+
+                eventListener(window, "load", function() {
+                    var hash = location.hash.slice(1);
+                    if (hash) {
+                        that.trigger(hash);
+                    }
+                })
+            }
+
+        }
+
+        function eventListener(ele, type, func) {
+            if (ele.addEventListener) {
+                ele.addEventListener(type, func, false);
+            } else if (ele.attachEvent) {
+                ele.attachEvent("on"+type, func);
+            } else {
+                ele["on"+type] = func;
+            }
+        }
+
+        ;(function() {
+            var app = new Route();
+            app.on("/article", function(param) {
+                var id = location.hash.slice(1);
+                console.log(param);
+                document.body.style.backgroundColor = "#2b7d57";
+                document.body.scrollTop = document.documentElement.scrollTop = getHeight(document.getElementById(id));
+            });
+            app.on("/article/:category", function(param) {
+                var id = location.hash.slice(1);
+                console.log(param);
+                document.body.style.backgroundColor = "#375273";
+                document.body.scrollTop = document.documentElement.scrollTop = getHeight(document.getElementById(id));
+            });
+            app.on("/article/:category/:page", function(param) {
+                var id = location.hash.slice(1);
+                console.log(param);
+                document.body.style.backgroundColor = "#9e638c";
+                document.body.scrollTop = document.documentElement.scrollTop = getHeight(document.getElementById(id));
+            });
+            app.init();
+
+
+
+            function getHeight(ele) {
+                var top = parseFloat(ele.offsetTop),
+                        eleParent = ele.offsetParent;
+                while (eleParent != null) {
+                    top += parseFloat(eleParent.offsetTop);
+                    eleParent = eleParent.offsetParent;
+                }
+                return top;
+            }
+
+        })();
+    </script>
+
+</body>
+</html>

@@ -101,6 +101,15 @@
         return localStorage.getItem("zzr_"+key);
     };
 
+    // 阻止默认事件
+    GesturePW.prototype._preventDefault = function(e) {
+        if (e.preventDefault) {
+            e.preventDefault();
+        } else {
+            e.returnValue = false;
+        }
+    };
+
     // 绑定自定义事件函数
     GesturePW.prototype.on = function(type, callback) {
         if (this.cache[type] == undefined) {
@@ -168,6 +177,7 @@
         this._addEvent(that.el, "touchstart", function(event) {
             var e = event || window.event,
                 index = that.getCenter(e);  // index为划过的圆圈的索引
+            that._preventDefault(e);
             if (index === false) {      // 如果手势没有滑过圆圈，则不做处理
                 return;
             } else {
@@ -183,6 +193,7 @@
 
         // 注册 touchmove 事件
         this._addEvent(that.el, "touchmove", function(event) {
+            that._preventDefault(e);
             if (that.indexArr.length == 0) {    // 如果手势没有滑过圆圈，则不做处理
                 return;
             }
@@ -197,6 +208,7 @@
 
         // 注册 touchend 事件
         this._addEvent(that.el, "touchend", function() {
+            that._preventDefault(e);
             if (that.indexArr.length == 0) {    // 如果手势没有滑过圆圈，则不做处理
                 return;
             }

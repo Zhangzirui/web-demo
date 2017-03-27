@@ -1,0 +1,87 @@
+/*===============
+    基本设置
+===============*/
+
+html {
+    height: 100%;
+    font-size: 62.5%;
+    color: #444;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    background-color: #F0F0F2;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/*===============
+    头部样式
+===============*/
+
+header {
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #333333;
+    background-color: #ffffff;
+}
+
+.title {
+    margin: 0;
+    line-height: 2rem;
+    font-size: 1.8rem;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+
+/*===============
+    主体样式
+===============*/
+
+#container {
+    width: 100%;
+}
+
+.main {
+    width: 80%;
+    padding-top: 5rem;
+    margin: 0 auto;
+}
+
+.password-canvas {
+    display: block;
+    height: 20rem;
+    width: 20rem;
+    margin: 0 auto 3rem;
+}
+
+
+.reminder {
+    line-height: 2rem;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+.password-form {
+    width: 20rem;
+    margin: 0 auto;
+}
+
+.password-form fieldset{
+    border: 0;
+}
+
+.password-form p {
+    line-height: 2rem;
+    font-size: 1.6rem;
+}
+
+
+.password-form label {
+    padding-left: 2rem;
+}

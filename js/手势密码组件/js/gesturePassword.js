@@ -192,6 +192,7 @@
 
         // 注册 touchmove 事件
         this._addEvent(that.el, "touchmove", function(event) {
+			var e = event || window.event;
             that._preventDefault(e);
             if (that.indexArr.length == 0) {    // 如果手势没有滑过圆圈，则不做处理
                 return;

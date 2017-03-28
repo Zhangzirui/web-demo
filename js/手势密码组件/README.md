@@ -41,13 +41,12 @@
 #### 使用：
 
 1. 引入
-
 		    <script type="text/javascript" src="js/gesturePassword.js"></script>
-			<script type="text/javascript">
-				var gesturePassword = new GesturePW(canvasDOM);	//其中canvasDOM是外部canvas元素，需要用户提供
-			    gesturePassword.init();
-			</script>
-	
+		    <script type="text/javascript">
+		    	var gesturePassword = new GesturePW(canvasDOM);	//其中canvasDOM是外部canvas元素，需要用户提供
+		    	gesturePassword.init();
+		    </script>
+
 	> canvasDOM 不要设置宽高，在下面配置中设定即可。
 
 2. 配置

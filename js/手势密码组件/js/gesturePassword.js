@@ -29,7 +29,7 @@
         };
         this.curStatus = this.status.PENDING;       // 组件当前状态
         this.setting = {                               // 组件的配置
-            cSize: 240,     // 设定canvas画布的大小，最好与外部所提供的canvasDOM大小相符，组件认定画布宽高一致
+            cSize: 240,     // 设定canvas画布的大小，组件认定画布宽高一致
             num: 3,         // 设定画布中圆圈的规模，默认为 3×3
             radius: null,   // 设定圆圈的半径，如果不设定，则自动通过画布大小和圆圈规模计算得出
             initialBorderColor: "#BBBBBB",  // 设定圆圈的初始轮廓颜色
@@ -177,6 +177,7 @@
         this._addEvent(that.el, "touchstart", function(event) {
             var e = event || window.event,
                 index = that.getCenter(e);  // index为划过的圆圈的索引
+            that._preventDefault(e);
             if (index === false) {      // 如果手势没有滑过圆圈，则不做处理
                 return;
             } else {
@@ -192,8 +193,6 @@
 
         // 注册 touchmove 事件
         this._addEvent(that.el, "touchmove", function(event) {
-			var e = event || window.event;
-            that._preventDefault(e);
             if (that.indexArr.length == 0) {    // 如果手势没有滑过圆圈，则不做处理
                 return;
             }
@@ -349,8 +348,8 @@
     GesturePW.prototype.getPosition = function(e) {
         var offsetL = this._getOffset(this.el).left,
             offsetT = this._getOffset(this.el).top,
-            x = e.touches[0].clientX - offsetL - 5,
-            y = e.touches[0].clientY - offsetT - 5,
+            x = e.touches[0].clientX - offsetL,
+            y = e.touches[0].clientY - offsetT,
             position = [];
         position.push(x);
         position.push(y);
@@ -360,25 +359,18 @@
     // 查看鼠标是否进入了圆圈内部，如果进入，返回该圆圈的索引，如果没有进入，则返回false
     GesturePW.prototype.getCenter = function(e) {
         var position = this.getPosition(e),
-            distanceArr = [],
             x = position[0],
             y = position[1],
             that = this;
 
-        // 计算鼠标离每一个圆心的距离
-        this.centerArrs.forEach(function(item) {
-            distanceArr.push(Math.floor(Math.sqrt(Math.pow((x-item[0]), 2) + Math.pow((y-item[1]), 2))));
-        });
-
         // 查看距离是否小于圆圈半径
-        var indexArr = distanceArr.filter(function(item, index) {
-            return item < that.setting.radius;
+        var indexArr = this.centerArrs.filter(function(item) {
+            return Math.abs(x-item[0])<=that.setting.radius && Math.abs(y-item[1])<=that.setting.radius
         });
-
         if (indexArr.length == 0) {
             return false;
         } else if (indexArr.length == 1) {
-            return distanceArr.indexOf(indexArr[0]);
+            return this.centerArrs.indexOf(indexArr[0]);
         } else {
             // 如果抛出该错误，证明存在边界条件作者没有考虑到，组件出现BUG。
             throw new Error("Error: BUG! (有某些情况没有考虑到)");

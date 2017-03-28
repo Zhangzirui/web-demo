@@ -49,14 +49,12 @@ header {
 
 .main {
     width: 80%;
-    padding-top: 5rem;
+    padding-top: 3rem;
     margin: 0 auto;
 }
 
 .password-canvas {
     display: block;
-    height: 20rem;
-    width: 20rem;
     margin: 0 auto 3rem;
 }
 

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>全屏滑动demo</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* 插件必要样式 */
+        /* begin */
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #container,
+        .sections,
+        .section {
+            position: relative;
+            height: 100%;
+        }
+
+        .horizontal {
+            position: fixed;
+            left: 50%;
+            bottom: 6%;
+            -webkit-transform: translateX(-50%);
+            -moz-transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+            -o-transform: translateX(-50%);
+            transform: translateX(-50%);
+        }
+
+        .vertical {
+            position: fixed;
+            right: 6%;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+        .page {
+            list-style: none;
+            width: 8px;
+            height: 8px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: #ddd;
+        }
+
+        .horizontal .page {
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .vertical .page {
+            margin-top: 10px;
+        }
+
+        .vertical .active {
+            margin-left: -2px;
+        }
+
+        .page.active {
+            width: 8px;
+            height: 8px;
+            border: solid 2px #fff069;
+            background-color: #000;
+        }
+        /* end */
+
+        #section0 {
+            background: url("images/1.jpg") no-repeat;
+        }
+
+        #section1 {
+            background: url("images/2.jpg") no-repeat;
+        }
+
+        #section2 {
+            background: url("images/3.jpg") no-repeat;
+        }
+
+        #section3 {
+            background: url("images/4.jpg") no-repeat;
+        }
+
+        #section0,
+        #section1,
+        #section2,
+        #section3 {
+            color: #ffffff;
+            background-color: #000000;
+            background-size: cover;
+            background-position: 50% 50%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div class="sections">
+            <div class="section" id="section0">
+                <h3>this is a page</h3>
+            </div>
+            <div class="section" id="section1">
+                <h3>this is a page</h3>
+            </div>
+            <div class="section" id="section2">
+                <h3>this is a page</h3>
+            </div>
+            <div class="section" id="section3">
+                <h3>this is a page</h3>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="jquery.pageSwitch.js"></script>
+    <script>
+        $("#container").PageSwitch({
+            direction: "horizontal"
+        });
+    </script>
+</body>
+</html>

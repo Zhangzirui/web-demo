@@ -2,9 +2,7 @@
 
 > 慕课网奇舞团课程之一
 
-页面展示：
-
-![](https://github.com/Zhangzirui/web-demo/blob/master/js/jquery全屏滚动插件/images/pageSwitch.png)
+页面展示: [点击](https://zhangzirui.github.io/web-demo/js/jquery全屏滚动插件/demo.html)
 
 ### 学习总结
 

@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 let app = express();
 let multipartMiddleware = multipart();
 
-const uploadDir = path.join(__dirname, '../static');
+const uploadDir = createStaticDir();
 
 app.use(multipart({uploadDir: uploadDir}));
 app.use(bodyParser());
@@ -59,4 +59,12 @@ console.log('server is open...');
 
 function isArr (target) {
     return Object.prototype.toString.call(target) === '[object Array]';
+}
+
+function createStaticDir () {
+    const url = path.join(__dirname, '../static');
+    if (!fs.existsSync(url)) {
+        fs.mkdirSync(url)
+    }
+    return url;
 }

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+        .list {
+            display: flex;
+            padding: 5px;
+            list-style: none;
+            border: 1px dashed rgb(7, 17, 27);
+        }
+        .text {
+            flex: 1;
+            margin: auto 0;
+        }
+        .down,
+        .del {
+            flex: 0 0 auto;
+            padding: 6px;
+            margin: 0 5px;
+            border: 1px solid;
+            box-shadow: 1px 1px 1px 1px rgba(7, 17, 27, 0.3), -1px -1px 1px 1px rgba(7, 17, 27, 0.3);
+            cursor: pointer;
+            color: rgb(7, 17, 27);
+        }
+        .down {
+            text-decoration: none;
+        }
+
+        .imgBox {
+            display: block;
+            width: 120px;
+            height: 150px;
+            text-align: center;
+            line-height: 150px;
+            font-size: 30px;
+            border: 2px dashed rgba(7, 17, 27, 0.5);
+            cursor: pointer;
+        }
+
+        .imgBox:hover,
+        .imgBox.active {
+            border: 2px dashed #11ff11;
+        }
+
+        .imgBox .img {
+        width: 100%;
+        height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <!--常规方法-->
+    <h1>常规方法</h1>
+    <form action="/upload_0" class="form_0" enctype="multipart/form-data" method="post">
+        <input type="file" class="file" name="file0">
+        <button type="submit" class="btn">常规上传</button>
+    </form>
+
+    <hr/>
+
+    <!--使用隐藏的iframe-->
+    <h1>使用隐藏的iframe</h1>
+    <form action="/upload_1" class="form_1" enctype="multipart/form-data" method="post" target="hide">
+        <input type="file" class="file1" name="file1">
+        <button type="submit" class="btn1">使用隐藏iframe实现上传</button>
+    </form>
+    <iframe name="hide" frameborder="0" style="display: none"></iframe>
+    <ul class="iframeLoad"></ul>
+
+    <hr/>
+
+    <!--使用XMLHttpRequest Level 2-->
+    <h1>使用XMLHttpRequest Level 2</h1>
+    <div class="form_2">
+        <input type="file" class="file2" name="file2" multiple>
+        <button type="submit" class="btn2">使用xhr2实现上传</button>
+    </div>
+    <span class="log"></span>
+    <p style="display: none" class="show">
+        <progress class="progress"></progress>
+        <button class="abort">取消上传</button>
+    </p>
+    <ul class="xhrLoad"></ul>
+
+    <hr/>
+
+    <!--使用FileReader进行图片预览, 允许拖拽-->
+    <h1>使用FileReader进行图片预览，允许拖拽</h1>
+    <div class="form_3">
+        <input type="file" class="file3" name="file3" accept="image/*" style="display: none">
+        <span class="imgBox btn3">+</span>
+    </div>
+    <ul class="lastLoad"></ul>
+
+
+
+    <script>
+        'use strict';
+        const btn2 = document.querySelector('.btn2'),
+            btn3 = document.querySelector('.btn3');
+        const log = document.querySelector('.log');
+        const loadWrap = document.querySelectorAll('ul');
+
+//      事件监听
+        btn2.onclick = function () {
+            upload(document.querySelector('.file2'), generateList.bind(null, document.querySelector('.xhrLoad')));
+        };
+
+        btn3.onclick = function () {
+            let file3 = document.querySelector('.file3');
+            file3.click();
+            file3.onchange = function () {
+                if (file3.files[0] === undefined) {
+                    return;
+                }
+                preview(file3.files[0], btn3, 'img');
+                upload(file3, generateList.bind(null, document.querySelector('.lastLoad')));
+            };
+        };
+
+        btn3.addEventListener('dragenter', dragEvent, false);
+        btn3.addEventListener('dragover', dragEvent, false);
+        btn3.addEventListener('drop', drop, false);
+
+//        生成表单栏绑定事件
+        for (let i = 0; i < loadWrap.length; i++) {
+            loadWrap[i].onclick = function (event) {
+                let e = event || window.event,
+                    target = e.target || e.srcElement,
+                    fileName = target.parentNode.firstChild.textContent;
+
+                if (target.className === 'del') {
+                    action('del', fileName, function () {
+                        target.parentNode.style.display = 'none';
+                    });
+                }
+            };
+        }
+
+
+        // 上传的事件
+        let upload = function (fileList, callback) {
+            const xhr = new XMLHttpRequest();
+            let formData = new FormData();
+            fileList.files[Symbol.iterator] = Array.prototype[Symbol.iterator];
+            for (let file of fileList.files) {
+                formData.append(`files2`, file, file.name);
+            }
+            xhr.onloadstart = function () {
+                let show = document.querySelector('.show'),
+                    abort = document.querySelector('.abort');
+                show.style.display = 'block';
+                abort.onclick = function () {
+                    xhr.abort();
+                    log.innerHTML = '已取消上传';
+                    show.style.display ='none';
+                };
+            };
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                    callback && callback(xhr.responseText);
+                } else {
+                    console.log(`error! status code: ${xhr.status}`);
+                }
+            };
+            xhr.upload.onprogress = function (event) {
+                let progress = document.querySelector('.progress');
+                if (event.lengthComputable) {
+                    progress.value = Math.round(Number(event.loaded) / Number(event.total) * 100);
+                    progress.max = 100;
+                }
+            };
+            xhr.onerror = function () {
+                console.log('upload error!');
+                log.innerHTML = '发生错误';
+            };
+
+            xhr.onloadend = function () {
+                let show = document.querySelector('.show');
+                show.style.display = 'none';
+                console.log('upload end!')
+            };
+
+            xhr.open('post', '/upload_2', true);
+            xhr.send(formData);
+        };
+
+        // 删除触发行为
+        let action = function (method, fileName, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                        callback && callback(xhr.responseText);
+                    } else {
+                        log.innerHTML = `${method}失败`;
+                    }
+                }
+            };
+            xhr.open('post', '/'+method, true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send(`${method}FileName=${fileName}`);
+        };
+
+
+        // FileReader相关
+        let preview = function (file, wrap, className) {
+            const pattern = /image\/[png|jpeg|gif]/;
+            if (pattern.test(file.type)) {
+                let fileReader = new FileReader();
+
+                fileReader.onload = function (event) {
+                    let img = new Image();
+                    img.src = event.target.result;
+                    img.className = className;
+                    wrap.innerHTML = '';
+                    wrap.appendChild(img);
+                };
+
+                fileReader.readAsDataURL(file)
+            }
+        };
+
+        // 拖拽相关
+        function dragEvent (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (btn3.className.indexOf('active') === -1) {
+                btn3.className = btn3.className + ' active';
+            }
+        }
+
+        function drop (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            let files = e.dataTransfer.files;
+            if (btn3.className.indexOf('active') !== -1) {
+                btn3.className = btn3.className.split(/\s+/).filter(item => item.indexOf('active') === -1).join(' ');
+            }
+            preview(files[0], btn3, 'img');
+            upload(e.dataTransfer, generateList.bind(null, document.querySelector('.lastLoad')));
+        }
+
+        // 使用iframe方法时，后台调用
+        function getLoadFile (path) {
+            generateList(document.querySelector('.iframeLoad'), path);
+        }
+
+        function isArr (target) {
+            return Object.prototype.toString.call(target) === '[object Array]';
+        }
+
+        function generateList (wrap, path) {
+            let _path;
+            try {
+                _path = JSON.parse(path);
+            } catch (e) {
+
+            }
+            if (isArr(_path)) {
+                for (let item of _path) {
+                    wrap.insertAdjacentHTML('beforeend', `<li class="list"><span class="text">${item}</span><a class="down" download="file" href="${item}">下载</a><span class="del">删除</span></li>`);
+                }
+            } else {
+                wrap.insertAdjacentHTML('beforeend', `<li class="list"><span class="text">${path}</span><a class="down" download="file" href="${path}">下载</a><span class="del">删除</span></li>`);
+            }
+        }
+    </script>
+
+</body>
+</html>

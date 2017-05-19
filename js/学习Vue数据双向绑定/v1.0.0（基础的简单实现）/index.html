@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <script>
+
+        class Event {
+            constructor () {
+                this.cache = {};
+            }
+
+            $watch (type, fn) {
+                if (this.cache[type] === undefined) {
+                    this.cache[type] = [];
+                }
+                let fns = this.cache[type];
+                if (fns.indexOf(fn) === -1) {
+                    fns.push(fn);
+                }
+            }
+
+            $trigger (type, ...rest) {
+                let fns = this.cache[type];
+                if (fns === undefined) {
+                    return false;
+                }
+                for (let fn of fns) {
+                    fn.apply(this, rest);
+                }
+            }
+
+            $remove (type, fn) {
+                let fns = this.cache[type];
+                if (fns === undefined) {
+                    return false;
+                }
+                if (!fn) {
+                    fns = undefined;
+                } else {
+                    fns.splice(fns.indexOf(fn), 1);
+                }
+            }
+        }
+
+        class Observer extends Event {
+            constructor (value) {
+                super();
+                this.data = value;
+                this.walk(value);
+            }
+
+            walk (obj) {
+                for (let key of Object.keys(obj)) {
+                    let value = obj[key];
+                    if (isObject(value)) {
+                        new Observer(value);
+                    }
+                    this.convert(obj, key, value);
+                }
+            }
+
+            convert (obj, key, value) {
+                Object.defineProperty(obj, key, {
+                    enumerable: true,
+                    configurable: true,
+                    get () {
+                        console.log(`你访问了${key}属性`);
+                        return value;
+                    },
+                    set: newValue => {
+                        console.log(`你将${key}属性从${value}改为了${newValue}`);
+                        value = newValue;
+                        if (isObject(value)) {
+                            new Observer(value);
+                        }
+                        this.$trigger(key, value);
+                    }
+                })
+            }
+        }
+
+        function isObject (obj) {
+            return Object.prototype.toString.call(obj) === '[object Object]';
+        }
+
+    /******************test******************/
+        let app1 = new Observer({
+            name: 'zzr',
+            age: '24'
+        });
+
+        console.log(app1.data.age);	// 你访问了age属性 // 24
+        app1.data.age = '25';		// 你将age属性从24改为了25
+        console.log(app1.data.age);	// 你访问了age属性 // 25
+
+
+        // 第一种情况：传递给构造函数的Observer的对象的属性也是对象
+        let app2 = new Observer({
+            msg: {
+                'a': 1,
+                'b': 2
+            }
+        });
+        console.log(app2.data.msg.a);	// 你访问了msg属性（没有提到a）
+
+        // 第二种情况：将实例化对象的属性改成对象
+        app1.data.name = {
+            'firstName': 'Zhang',
+            'lastName': 'zirui'
+        };	// 你将name属性从zzr改为了[object Object]
+
+        console.log(app1.data.name.firstName);	// 你访问了name属性 (没有提到firstName）
+
+
+        app1.$watch('age', function (age) {
+             console.log(`触发监听事件，age变成${age}`);
+        });
+        app1.data.age = '18';
+    </script>
+
+</body>
+</html>
